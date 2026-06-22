@@ -562,11 +562,17 @@ ORDER BY bm25(chunks_fts) LIMIT ?`, ftsQuery(req.Query), collection, candidateLi
 }
 
 func (s *Store) Get(ctx context.Context, id string) (Source, error) {
+	query := `SELECT id,kind,path,title,collection,hash,media_type,text,created_at,updated_at FROM sources WHERE id=?`
+	args := []any{id}
+	if len(s.settings.Collections) > 0 {
+		query += ` AND collection IN (` + placeholders(len(s.settings.Collections)) + `)`
+		for _, c := range s.settings.Collections {
+			args = append(args, c)
+		}
+	}
 	var source Source
 	var created, updated string
-	err := s.db.QueryRowContext(ctx, `
-SELECT id,kind,path,title,collection,hash,media_type,text,created_at,updated_at
-FROM sources WHERE id=?`, id).Scan(
+	err := s.db.QueryRowContext(ctx, query, args...).Scan(
 		&source.ID, &source.Kind, &source.Path, &source.Title, &source.Collection,
 		&source.Hash, &source.MediaType, &source.Text, &created, &updated)
 	if errors.Is(err, sql.ErrNoRows) {
@@ -617,6 +623,19 @@ FROM sources WHERE collection=? ORDER BY updated_at DESC LIMIT ?`, collection, l
 func (s *Store) Delete(ctx context.Context, id string) (map[string]any, error) {
 	if !s.settings.AllowDelete {
 		return nil, errors.New("knowledge deletion is disabled")
+	}
+	if len(s.settings.Collections) > 0 {
+		var collection string
+		err := s.db.QueryRowContext(ctx, `SELECT collection FROM sources WHERE id=?`, id).Scan(&collection)
+		if errors.Is(err, sql.ErrNoRows) {
+			return map[string]any{"id": id, "deleted": false}, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+		if !slices.Contains(s.settings.Collections, collection) {
+			return nil, fmt.Errorf("source %q belongs to collection %q which is not accessible", id, collection)
+		}
 	}
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
@@ -917,6 +936,13 @@ func insideAny(path string, roots []string) bool {
 		}
 	}
 	return false
+}
+
+func placeholders(n int) string {
+	if n <= 0 {
+		return ""
+	}
+	return strings.Repeat("?,", n-1) + "?"
 }
 
 func cosine(a, b []float64) float64 {
