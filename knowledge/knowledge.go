@@ -1,12 +1,12 @@
 package knowledge
 
 import (
-	"aurora-dispatchers-documents/documents"
-	"aurora-dispatchers/builtin"
-	"aurora-dispatchers/registry"
-	"aurora-dispatchers/resolution"
+	"github.com/aurora-capcompute/aurora-dispatchers-documents/documents"
+	"github.com/aurora-capcompute/aurora-dispatchers/builtin"
+	"github.com/aurora-capcompute/aurora-dispatchers/registry"
+	"github.com/aurora-capcompute/aurora-dispatchers/resolution"
 	"bytes"
-	"capcompute/dispatcher"
+	"github.com/aurora-capcompute/capcompute/dispatcher"
 	"context"
 	"crypto/sha256"
 	"database/sql"

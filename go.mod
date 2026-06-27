@@ -1,11 +1,11 @@
-module aurora-dispatchers-knowledge
+module github.com/aurora-capcompute/aurora-dispatchers-knowledge
 
 go 1.26
 
 require (
-	aurora-dispatchers v0.0.0
-	aurora-dispatchers-documents v0.0.0
-	capcompute v0.0.0
+	github.com/aurora-capcompute/aurora-dispatchers v0.0.0-00010101000000-000000000000
+	github.com/aurora-capcompute/aurora-dispatchers-documents v0.0.0-00010101000000-000000000000
+	github.com/aurora-capcompute/capcompute v0.0.0-00010101000000-000000000000
 	modernc.org/sqlite v1.53.0
 )
 
@@ -21,12 +21,7 @@ require (
 	modernc.org/memory v1.11.0 // indirect
 )
 
-replace aurora-dispatchers => ../aurora-dispatchers
 
-replace aurora-dispatchers-documents => ../aurora-dispatchers-documents
 
-replace aurora-capcompute => ../aurora-capcompute
 
-replace aurora-stores => ../aurora-stores
 
-replace capcompute => ../capcompute
