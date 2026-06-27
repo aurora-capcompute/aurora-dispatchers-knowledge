@@ -3,8 +3,8 @@ module github.com/aurora-capcompute/aurora-dispatchers-knowledge
 go 1.26
 
 require (
-	github.com/aurora-capcompute/aurora-dispatchers v0.0.0-20260627183024-5956feb4e693
-	github.com/aurora-capcompute/aurora-dispatchers-documents v0.0.0-20260627183505-047c507250b5
+	github.com/aurora-capcompute/aurora-dispatchers v0.0.0-20260627193302-a66a00a26cc6
+	github.com/aurora-capcompute/aurora-dispatchers-documents v0.0.0-20260627193309-0786b6f6c5e5
 	github.com/aurora-capcompute/capcompute v0.0.0-20260627192717-954ff0270676
 	modernc.org/sqlite v1.53.0
 )
