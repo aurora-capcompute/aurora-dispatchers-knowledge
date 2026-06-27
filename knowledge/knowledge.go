@@ -4,7 +4,6 @@ import (
 	"github.com/aurora-capcompute/aurora-dispatchers-documents/documents"
 	"github.com/aurora-capcompute/aurora-dispatchers/builtin"
 	"github.com/aurora-capcompute/aurora-dispatchers/registry"
-	"github.com/aurora-capcompute/aurora-dispatchers/resolution"
 	"bytes"
 	"github.com/aurora-capcompute/capcompute/dispatcher"
 	"context"
@@ -200,9 +199,9 @@ type Handler struct {
 
 func (h *Handler) Handles(name string) bool { return name == h.name }
 
-func (h *Handler) DispatchCall(ctx context.Context, call dispatcher.Call) (dispatcher.Outcome, error) {
+func (h *Handler) DispatchCall(ctx context.Context, call dispatcher.Call, auth dispatcher.Authorization) (dispatcher.Outcome, error) {
 	if h.settings.RequireApproval {
-		if resolved, ok := resolution.FromContext(ctx); !ok || resolved.Decision != resolution.Approved {
+		if auth.Decision != dispatcher.Approved {
 			return dispatcher.Yield("Approve " + call.Name + " in knowledge store " + h.settings.DatabasePath), nil
 		}
 	}
@@ -252,13 +251,13 @@ func (h *Handler) DispatchCall(ctx context.Context, call dispatcher.Call) (dispa
 			result, err = h.store.Reindex(ctx, req.Collection)
 		}
 	default:
-		return dispatcher.Failed("unknown knowledge call: " + call.Name), nil
+		return dispatcher.Fail("unknown knowledge call: " + call.Name), nil
 	}
 	if err != nil {
 		if ctx.Err() != nil {
 			return dispatcher.Outcome{}, ctx.Err()
 		}
-		return dispatcher.Failed(err.Error()), nil
+		return dispatcher.Fail(err.Error()), nil
 	}
 	raw, err := json.Marshal(result)
 	if err != nil {
