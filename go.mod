@@ -3,9 +3,9 @@ module github.com/aurora-capcompute/aurora-dispatchers-knowledge
 go 1.26
 
 require (
-	github.com/aurora-capcompute/aurora-dispatchers v0.0.0-20260627193302-a66a00a26cc6
-	github.com/aurora-capcompute/aurora-dispatchers-documents v0.0.0-20260627193439-3e1dc2e78ce1
-	github.com/aurora-capcompute/capcompute v0.0.0-20260627192717-954ff0270676
+	github.com/aurora-capcompute/aurora-dispatchers v0.0.0-20260629161346-52a96ac6ce45
+	github.com/aurora-capcompute/aurora-dispatchers-documents v0.0.0-20260629161730-cac7be5f032f
+	github.com/aurora-capcompute/capcompute v0.0.0-20260627172717-954ff0270676
 	modernc.org/sqlite v1.53.0
 )
 
@@ -20,8 +20,3 @@ require (
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 )
-
-
-
-
-
